@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#537AC6</color>
+    <color name="colorPrimaryDark">#26457F</color>
+    <color name="colorAccent">#4C89FF</color>
+    <color name="iconColor">#ABABAB</color>
+    <color name="selectedListViewItemColor">#ddd</color>
+    <color name="windowColor">#efefef</color>
+</resources>

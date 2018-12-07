@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory
+        android:title="@string/pref_connection_category_title"
+        android:key="@string/pref_connection_category_key">
+
+        <EditTextPreference
+            android:title="@string/pref_host_title"
+            android:key="@string/pref_host_key"
+            android:defaultValue="http://192.168.1.4"
+            app:useSimpleSummaryProvider="true"/>
+
+        <EditTextPreference
+                android:title="@string/pref_port_title"
+                android:key="@string/pref_port_key"
+                android:defaultValue="4316"
+                app:useSimpleSummaryProvider="true"/>
+
+        <EditTextPreference
+                android:title="@string/pref_username_title"
+                android:key="@string/pref_username_key"
+                android:defaultValue="openlp"
+                app:useSimpleSummaryProvider="true"/>
+
+        <EditTextPreference
+                android:title="@string/pref_password_title"
+                android:key="@string/pref_password_key"
+                android:defaultValue="password"
+                app:useSimpleSummaryProvider="true"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/pref_about_category_title"
+        android:key="@string/pref_about_category_key">
+        <Preference
+            android:key="@string/pref_version_key"
+            android:title="@string/pref_version_title"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

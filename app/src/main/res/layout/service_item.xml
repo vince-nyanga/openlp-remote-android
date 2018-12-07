@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+                                                   android:layout_marginTop="4dp"
+        app:cardElevation="0dp" android:foreground="?attr/selectableItemBackground"
+                                                   android:id="@+id/itemContainer">
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+           >
+
+        <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp" app:srcCompat="@drawable/ic_description_24dp"
+                android:id="@+id/itemImage" android:layout_marginTop="8dp"
+                app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
+        />
+        <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/itemTitle" app:layout_constraintStart_toEndOf="@+id/itemImage"
+                android:layout_marginStart="8dp"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                tools:text="Service Item Title" android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toStartOf="@+id/liveText"
+                app:layout_constraintTop_toTopOf="@+id/itemImage" android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/itemImage"/>
+        <TextView
+                android:text="@string/live"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/liveText"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                app:layout_constraintEnd_toEndOf="parent" android:textSize="8sp"
+                android:paddingLeft="@dimen/live_text_padding"
+                android:paddingRight="@dimen/live_text_padding"
+                android:background="@color/colorAccent"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent"/>
+        <com.google.android.material.button.MaterialButton
+                android:text="@string/previous_slide"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/previousSlideBtn"
+                android:textAllCaps="false"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                app:layout_constraintTop_toBottomOf="@+id/itemImage" app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="8dp"
+                app:icon="@drawable/ic_arrow_back_black_24dp"
+                app:iconTint="@color/colorAccent"
+                app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="4dp"/>
+        <com.google.android.material.button.MaterialButton
+                android:text="@string/next_slide"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAllCaps="false"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                app:icon="@drawable/ic_arrow_forward_black_24dp"
+                app:iconTint="@color/colorAccent"
+                android:id="@+id/nextSlideBtn" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+                app:layout_constraintTop_toTopOf="@+id/previousSlideBtn"
+                app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="4dp"/>
+        <androidx.constraintlayout.widget.Group android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                                android:id="@+id/selectedGroup"
+                                                app:constraint_referenced_ids="nextSlideBtn,previousSlideBtn,liveText"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>
