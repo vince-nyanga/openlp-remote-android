@@ -30,6 +30,9 @@ ListAdapter<ServiceItem, ServiceItemsAdapter.ServiceItemHolder>(ServiceItemDiffC
         holder.bind(item, serviceItemCallbacks)
     }
 
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
 
     class ServiceItemHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         private val itemTitleText = itemView.findViewById<TextView>(R.id.itemTitle)

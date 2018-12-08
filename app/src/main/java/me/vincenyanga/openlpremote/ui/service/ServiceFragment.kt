@@ -16,14 +16,16 @@ import me.vincenyanga.openlpremote.domain.Result
 import me.vincenyanga.openlpremote.model.RequestResult
 import me.vincenyanga.openlpremote.model.ServiceData
 import me.vincenyanga.openlpremote.model.ServiceItem
+import me.vincenyanga.openlpremote.setIsVisible
 import timber.log.Timber
 import javax.inject.Inject
 
 class ServiceFragment : DaggerFragment() {
 
-    @Inject lateinit var viewModelFactory:OpenLPViewModelFactory
+    @Inject
+    lateinit var viewModelFactory: OpenLPViewModelFactory
     private lateinit var viewModel: ServiceViewModel
-    private val serviceItemCallbacks = object :ServiceItemCallbacks {
+    private val serviceItemCallbacks = object : ServiceItemCallbacks {
         override fun onItemSelected(item: ServiceItem) {
             selectItem(item.selectionId!!)
         }
@@ -42,7 +44,7 @@ class ServiceFragment : DaggerFragment() {
 
     private fun selectItem(selectionId: Int) {
         viewModel.selectItem(selectionId).observe(this@ServiceFragment, Observer<Result<RequestResult>> { result ->
-            when (result){
+            when (result) {
                 is Result.Success -> viewModel.refresh()
                 is Result.Error -> showError(result.exception.message)
             }
@@ -60,13 +62,14 @@ class ServiceFragment : DaggerFragment() {
         super.onActivityCreated(savedInstanceState)
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ServiceViewModel::class.java)
-
+        serviceItemsAdapter.setHasStableIds(true)
         serviceItems.layoutManager = LinearLayoutManager(context)
         serviceItems.adapter = serviceItemsAdapter
-
+        serviceItems.itemAnimator?.changeDuration = 0
         refreshBtn.setOnClickListener {
             viewModel.refresh()
         }
+        subscribeUi()
     }
 
     private fun showError(message: String?) {
@@ -75,28 +78,52 @@ class ServiceFragment : DaggerFragment() {
 
     override fun onResume() {
         super.onResume()
-        subscribeUi()
-
+        viewModel.refresh()
     }
 
     private fun subscribeUi() {
         viewModel.serviceData.observe(this@ServiceFragment,
             Observer<Result<ServiceData>> { result ->
-                when (result){
+                when (result) {
                     is Result.Error -> {
                         Timber.e(result.exception)
-                        Toast.makeText(context, "${result.exception.message}", Toast.LENGTH_LONG).show()
+                        showErrorState(result.exception)
+                    }
+                    is Result.Success -> showSuccessState(result.data.items)
 
-                    }
-                    is Result.Success -> {
-                       serviceItemsAdapter.submitList(result.data.items)
-                    }
-                    is Result.Loading -> {
-
-                    }
+                    is Result.Loading -> showLoadingState()
                 }
             })
-        viewModel.refresh()
     }
+
+    private fun showErrorState(exception: Exception) {
+        emptyMessage.setIsVisible(false)
+        serviceItems.setIsVisible(false)
+        loadingPb.setIsVisible(false)
+        showError(exception.message)
+    }
+
+    private fun showSuccessState(data: List<ServiceItem>) {
+
+        serviceItemsAdapter.submitList(data)
+        serviceItems.postDelayed({
+            loadingPb.visibility = View.GONE
+        }, 150)
+
+        serviceItems.postDelayed({
+            emptyMessage.setIsVisible(data.isEmpty())
+            serviceItems.setIsVisible(!data.isEmpty())
+            serviceItemsAdapter.submitList(data)
+        }, 150)
+
+
+    }
+
+    private fun showLoadingState() {
+        emptyMessage.setIsVisible(false)
+        serviceItems.setIsVisible(false)
+        loadingPb.setIsVisible(true)
+    }
+
 
 }

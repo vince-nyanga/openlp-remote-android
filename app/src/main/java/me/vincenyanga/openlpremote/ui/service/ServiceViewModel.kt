@@ -24,7 +24,7 @@ class ServiceViewModel @Inject constructor(private val apiFactory: ApiFactory) :
     private var data: LiveData<Result<ServiceData>>? =null
 
     private val observer: Observer<Result<ServiceData>> = Observer{
-        serviceData.value = it
+        serviceData.postValue(it)
     }
 
     fun refresh(){
