@@ -43,4 +43,5 @@
     <string name="add_to_service_and_live">Add to service and live</string>
     <string name="added_to_live">Added to live screen</string>
     <string name="added_to_service">Added to service</string>
+    <string name="refresh">Refresh</string>
 </resources>

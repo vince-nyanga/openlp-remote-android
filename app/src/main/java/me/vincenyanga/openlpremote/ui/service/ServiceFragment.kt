@@ -21,15 +21,8 @@ import javax.inject.Inject
 
 class ServiceFragment : DaggerFragment() {
 
-    companion object {
-        fun newInstance() = ServiceFragment()
-    }
-
     @Inject lateinit var viewModelFactory:OpenLPViewModelFactory
     private lateinit var viewModel: ServiceViewModel
-
-    lateinit var serviceItemsAdapter: ServiceItemsAdapter
-
     private val serviceItemCallbacks = object :ServiceItemCallbacks {
         override fun onItemSelected(item: ServiceItem) {
             selectItem(item.selectionId!!)
@@ -43,6 +36,9 @@ class ServiceFragment : DaggerFragment() {
             viewModel.goToPrevSlide()
         }
     }
+
+    private val serviceItemsAdapter = ServiceItemsAdapter(serviceItemCallbacks)
+
 
     private fun selectItem(selectionId: Int) {
         viewModel.selectItem(selectionId).observe(this@ServiceFragment, Observer<Result<RequestResult>> { result ->
@@ -62,11 +58,15 @@ class ServiceFragment : DaggerFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ServiceViewModel::class.java)
-        serviceItemsAdapter = ServiceItemsAdapter(serviceItemCallbacks)
 
         serviceItems.layoutManager = LinearLayoutManager(context)
         serviceItems.adapter = serviceItemsAdapter
+
+        refreshBtn.setOnClickListener {
+            viewModel.refresh()
+        }
     }
 
     private fun showError(message: String?) {
@@ -81,15 +81,15 @@ class ServiceFragment : DaggerFragment() {
 
     private fun subscribeUi() {
         viewModel.serviceData.observe(this@ServiceFragment,
-            Observer<Result<ServiceData>> { t ->
-                when (t){
+            Observer<Result<ServiceData>> { result ->
+                when (result){
                     is Result.Error -> {
-                        Timber.e(t.exception)
-                        Toast.makeText(context, "${t.exception.message}", Toast.LENGTH_LONG).show()
+                        Timber.e(result.exception)
+                        Toast.makeText(context, "${result.exception.message}", Toast.LENGTH_LONG).show()
 
                     }
                     is Result.Success -> {
-                       serviceItemsAdapter.submitList(t.data.items)
+                       serviceItemsAdapter.submitList(result.data.items)
                     }
                     is Result.Loading -> {
 
