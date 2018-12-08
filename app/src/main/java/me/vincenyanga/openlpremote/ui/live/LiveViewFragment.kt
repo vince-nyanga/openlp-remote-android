@@ -1,16 +1,13 @@
 package me.vincenyanga.openlpremote.ui.live
 
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.browser.customtabs.CustomTabsClient
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.lifecycle.Observer
 import androidx.preference.PreferenceManager
@@ -32,7 +29,9 @@ class LiveViewFragment : DaggerFragment() {
 
     private lateinit var viewModel: LiveViewViewModel
     @Inject lateinit var openLPViewModelFactory: OpenLPViewModelFactory
-    private lateinit var liveViewAdapter: LiveViewAdapter
+    private val liveViewAdapter = LiveViewAdapter {
+        selectSlide(it.selectionId!!)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,11 +43,8 @@ class LiveViewFragment : DaggerFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this, openLPViewModelFactory).get(LiveViewViewModel::class.java)
-        viewLiveScreen.setOnClickListener { showLiveViewTab() }
+        refreshBtn.setOnClickListener { viewModel.refresh() }
         slides.layoutManager = LinearLayoutManager(context)
-        liveViewAdapter = LiveViewAdapter {
-            selectSlide(it.selectionId!!)
-        }
         slides.adapter = liveViewAdapter
     }
 

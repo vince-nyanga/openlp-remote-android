@@ -21,11 +21,12 @@
             app:layout_constraintEnd_toEndOf="parent" android:id="@+id/slides" tools:listitem="@layout/live_view_item"
             app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="32dp"/>
     <com.google.android.material.button.MaterialButton
-            android:text="@string/view_live"
+            android:text="@string/refresh"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/viewLiveScreen"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:id="@+id/refreshBtn"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+            app:icon="@drawable/ic_refresh_24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/textView4"/>
 
