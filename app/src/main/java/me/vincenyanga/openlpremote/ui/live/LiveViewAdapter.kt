@@ -25,6 +25,10 @@ class LiveViewAdapter(private val onSlideClickListener: (Slide) -> Unit) :
         slide.selectionId = position
         holder.bind(slide, onSlideClickListener)
     }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
 }
 
 @Suppress("DEPRECATION")

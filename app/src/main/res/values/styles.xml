@@ -10,9 +10,9 @@
 
     </style>
 
-    <style name="OpenLpEditText" parent="Base.Widget.MaterialComponents.TextInputEditText">
-        <item name="android:paddingTop">8dp</item>
-        <item name="android:paddingBottom">8dp</item>
-    </style>
+   <style name="EmptyListMessageStyle" parent="TextAppearance.MaterialComponents.Caption">
+       <item name="android:textSize">16sp</item>
+       <item name="android:textStyle">italic</item>
+   </style>
 
 </resources>

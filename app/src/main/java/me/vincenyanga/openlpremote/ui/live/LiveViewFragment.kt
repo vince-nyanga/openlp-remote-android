@@ -19,6 +19,9 @@ import me.vincenyanga.openlpremote.R
 import me.vincenyanga.openlpremote.di.OpenLPViewModelFactory
 import me.vincenyanga.openlpremote.domain.Result
 import me.vincenyanga.openlpremote.model.RequestResult
+import me.vincenyanga.openlpremote.model.Slide
+import me.vincenyanga.openlpremote.setIsVisible
+import java.lang.Exception
 import javax.inject.Inject
 
 class LiveViewFragment : DaggerFragment() {
@@ -44,6 +47,7 @@ class LiveViewFragment : DaggerFragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this, openLPViewModelFactory).get(LiveViewViewModel::class.java)
         refreshBtn.setOnClickListener { viewModel.refresh() }
+        liveViewAdapter.setHasStableIds(true)
         slides.layoutManager = LinearLayoutManager(context)
         slides.adapter = liveViewAdapter
     }
@@ -67,13 +71,24 @@ class LiveViewFragment : DaggerFragment() {
     private fun subscribeUi() {
         viewModel.liveViewData.observe(this@LiveViewFragment, Observer {
             when(it){
-                is Result.Error -> showError(it.exception.message)
-                is Result.Success -> {
-                    liveViewAdapter.submitList(it.data.slides)
-                }
+                is Result.Error -> showErrorState(it.exception)
+                is Result.Success -> showSuccessState(it.data.slides)
             }
         })
         viewModel.refresh()
+    }
+
+
+    private fun showSuccessState(data: List<Slide>) {
+        emptyMessage.setIsVisible(data.isEmpty())
+        slides.setIsVisible(!data.isEmpty())
+        liveViewAdapter.submitList(data)
+    }
+
+    private fun showErrorState(exception: Exception) {
+        emptyMessage.setIsVisible(false)
+        slides.setIsVisible(false)
+        showError(exception.message)
     }
 
     private fun showError(message: String?) {

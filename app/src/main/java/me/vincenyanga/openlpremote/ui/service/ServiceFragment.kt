@@ -65,7 +65,6 @@ class ServiceFragment : DaggerFragment() {
         serviceItemsAdapter.setHasStableIds(true)
         serviceItems.layoutManager = LinearLayoutManager(context)
         serviceItems.adapter = serviceItemsAdapter
-        serviceItems.itemAnimator?.changeDuration = 0
         refreshBtn.setOnClickListener {
             viewModel.refresh()
         }

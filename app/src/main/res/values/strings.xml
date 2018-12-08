@@ -45,4 +45,5 @@
     <string name="added_to_service">Added to service</string>
     <string name="refresh">Refresh</string>
     <string name="no_items_in_service_manager">No items in service manager</string>
+    <string name="no_slides_on_display">No slides on display</string>
 </resources>
