@@ -1,8 +1,11 @@
 package me.vincenyanga.openlpremote.ui.search
 
+import android.content.Context
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
@@ -70,6 +73,15 @@ class SearchActivity : DaggerAppCompatActivity() {
         searchResults.addItemDecoration(divider)
         searchResults.layoutManager = LinearLayoutManager(this@SearchActivity)
         searchResults.adapter = searchResultsAdapter
+
+        searchText.setOnEditorActionListener { view, id, _ ->
+            if (id == EditorInfo.IME_ACTION_DONE) {
+                searchPlugins()
+                val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputMethodManager.hideSoftInputFromWindow(view.windowToken,0)
+            }
+            true
+        }
 
     }
 
