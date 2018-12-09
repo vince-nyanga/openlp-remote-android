@@ -1,13 +1,16 @@
 package me.vincenyanga.openlpremote.ui.service
 
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.service_fragment.*
 import me.vincenyanga.openlpremote.R

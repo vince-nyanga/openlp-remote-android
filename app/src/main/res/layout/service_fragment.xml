@@ -51,4 +51,5 @@
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
             style="@style/EmptyListMessageStyle"
             android:visibility="gone"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

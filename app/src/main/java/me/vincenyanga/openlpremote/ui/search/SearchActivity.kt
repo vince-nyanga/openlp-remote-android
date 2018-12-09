@@ -17,7 +17,7 @@ import me.vincenyanga.openlpremote.R
 import me.vincenyanga.openlpremote.di.OpenLPViewModelFactory
 import me.vincenyanga.openlpremote.domain.Result
 import me.vincenyanga.openlpremote.model.SearchResult
-import timber.log.Timber
+import me.vincenyanga.openlpremote.setIsVisible
 import javax.inject.Inject
 
 class SearchActivity : DaggerAppCompatActivity() {
@@ -86,10 +86,9 @@ class SearchActivity : DaggerAppCompatActivity() {
 
         viewModel.search(selectedPlugin, searchText.text.toString()).observe(this@SearchActivity, Observer { results ->
             when (results) {
-                is Result.Success -> {
-                    searchResultsAdapter.submitList(results.data)
-                }
-                is Result.Error -> showMessage("Error: ${results.exception.message}")
+                is Result.Success ->showSuccessState(results.data)
+                is Result.Error -> showErrorState(results.exception)
+                is Result.Loading -> showLoadingState()
             }
         })
     }
@@ -114,10 +113,13 @@ class SearchActivity : DaggerAppCompatActivity() {
     private fun getPlugins() {
         viewModel.getPlugins().observe(this@SearchActivity, Observer { result ->
             when (result) {
+                is Result.Error -> showErrorState(result.exception)
                 is Result.Success -> adapter.setData(result.data)
             }
         })
     }
+
+
 
     private fun showOptions(view: View, searchResult: SearchResult) {
 
@@ -137,22 +139,50 @@ class SearchActivity : DaggerAppCompatActivity() {
     }
 
     private fun addToLive(result: SearchResult){
-        viewModel.addToLive(selectedPlugin, result.id).observe(this@SearchActivity, Observer { result ->
-            when(result){
-                is Result.Error -> showMessage("Error: ${result.exception.message}")
+        viewModel.addToLive(selectedPlugin, result.id).observe(this@SearchActivity, Observer { searchResult ->
+            when(searchResult){
+                is Result.Error -> showMessage("Error: ${searchResult.exception.message}")
                 is Result.Success -> showMessage(getString(R.string.added_to_live))
             }
         })
     }
 
     private fun addToService(result:SearchResult){
-        viewModel.addToService(selectedPlugin, result.id).observe(this@SearchActivity, Observer { result ->
-            when(result){
-                is Result.Error -> showMessage("Error: ${result.exception.message}")
+        viewModel.addToService(selectedPlugin, result.id).observe(this@SearchActivity, Observer { searchResult ->
+            when(searchResult){
+                is Result.Error ->showError(searchResult.exception.message)
                 is Result.Success -> showMessage(getString(R.string.added_to_service))
             }
         })
     }
 
+    private fun showErrorState(exception: Exception) {
+        emptyMessage.setIsVisible(false)
+        searchResults.setIsVisible(false)
+        loadingPb.setIsVisible(false)
+        showError(exception.message)
+    }
 
+    private fun showLoadingState() {
+        emptyMessage.setIsVisible(false)
+        searchResults.setIsVisible(false)
+        loadingPb.setIsVisible(true)
+    }
+
+    private fun showSuccessState(data: List<SearchResult>) {
+
+        searchResults.postDelayed({
+            loadingPb.visibility = View.GONE
+        }, 150)
+
+        searchResults.postDelayed({
+            emptyMessage.setIsVisible(data.isEmpty())
+            searchResults.setIsVisible(!data.isEmpty())
+            searchResultsAdapter.submitList(data)
+        }, 150)
+    }
+
+    private fun showError(message: String?){
+        Toast.makeText(this@SearchActivity, "Error: $message", Toast.LENGTH_SHORT).show()
+    }
 }
