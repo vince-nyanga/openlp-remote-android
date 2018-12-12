@@ -31,6 +31,7 @@ class MainActivity : DaggerAppCompatActivity() {
     private lateinit var viewModel: AlertViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.OpenLpTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(appBar)
