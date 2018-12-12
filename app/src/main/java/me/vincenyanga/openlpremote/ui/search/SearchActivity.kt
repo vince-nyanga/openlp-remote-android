@@ -66,8 +66,9 @@ class SearchActivity : DaggerAppCompatActivity() {
 
         }
 
-        searchButton.setOnClickListener {
+        searchButton.setOnClickListener { view->
             searchPlugins()
+            hideKeyboard(view)
         }
         val divider = DividerItemDecoration(this@SearchActivity, DividerItemDecoration.VERTICAL)
         searchResults.addItemDecoration(divider)
@@ -77,12 +78,17 @@ class SearchActivity : DaggerAppCompatActivity() {
         searchText.setOnEditorActionListener { view, id, _ ->
             if (id == EditorInfo.IME_ACTION_DONE) {
                 searchPlugins()
-                val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                inputMethodManager.hideSoftInputFromWindow(view.windowToken,0)
+                hideKeyboard(view)
+
             }
             true
         }
 
+    }
+
+    private fun hideKeyboard(view: View) {
+        val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken,0)
     }
 
     private fun searchPlugins() {
